@@ -1,0 +1,12 @@
+.search-bar {
+    display: flex;
+    gap: 15px;
+}
+
+.search-bar__input {
+    flex-basis: 40%;
+}
+
+.search-bar__add-course-btn {
+    margin-left: auto;
+}

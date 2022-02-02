@@ -1,0 +1,44 @@
+.courses-card {
+    height: 160px;
+    padding: 15px;
+    border: 2px solid var(--course-border-color);
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.courses-card__main-info {
+    flex-shrink: 0;
+    flex-basis: 65%;
+}
+
+.main-info__title {
+    margin-bottom: 15px;
+}
+
+.courses-card__secondary-info {
+    flex-basis: 35%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.secondary-info__title {
+    font-weight: bold;
+}
+
+.secondary-info__actions {
+    text-align: center;
+}
+
+.secondary-info__points {
+    margin-bottom: 5px;
+}
+
+.secondary-info__authors {
+    max-width: 441px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
