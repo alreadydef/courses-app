@@ -6,25 +6,27 @@ import classes from './Courses.module.css';
 import { pipeDuration } from '../../helpers';
 
 const Courses = ({ onSearchHandler, onAddHandler, courses, authors }) => {
-	const mappedCourses = courses.map((course) => {
-		const mappedAuthors = course.authors.map((authorId) => {
-			const mappedAuthor = authors.find((author) => author.id === authorId);
+	const switchAuthorIdsToNames = (authorIds) => {
+		const authorNames = authorIds.map((authorId) => {
+			const foundAuthor = authors.find((author) => author.id === authorId);
 
-			return mappedAuthor.name;
+			return foundAuthor.name;
 		});
 
-		return (
-			<CourseCard
-				key={course.id}
-				authors={mappedAuthors}
-				title={course.title}
-				duration={pipeDuration(course.duration)}
-				description={course.description}
-				creationTime={course.creationDate}
-				onShowCourse={() => console.log('show course')}
-			/>
-		);
-	});
+		return authorNames;
+	};
+
+	const mappedCourses = courses.map((course) => (
+		<CourseCard
+			key={course.id}
+			authors={switchAuthorIdsToNames(course.authors)}
+			title={course.title}
+			duration={pipeDuration(course.duration)}
+			description={course.description}
+			creationTime={course.creationDate}
+			onShowCourse={() => console.log('show course')}
+		/>
+	));
 
 	return (
 		<section>

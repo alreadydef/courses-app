@@ -27,17 +27,21 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 			prevCourseAuthors.filter((courseAuthor) => courseAuthor !== authorId)
 		);
 
-	const authorsList = authors
-		.filter((author) => !courseAuthors.includes(author.id))
-		.map((author) => (
-			<li className={classes['author-list__item']} key={author.id}>
-				{author.name}
-				<Button
-					text={TEXT_CONSTANTS.ADD_AUTHOR_BTN_TEXT}
-					onClick={addAuthor(author.id)}
-				/>
-			</li>
-		));
+	const authorsList = authors.flatMap((author) => {
+		if (courseAuthors.includes(author.id)) {
+			return [];
+		} else {
+			return [
+				<li className={classes['author-list__item']} key={author.id}>
+					{author.name}
+					<Button
+						text={TEXT_CONSTANTS.ADD_AUTHOR_BTN_TEXT}
+						onClick={addAuthor(author.id)}
+					/>
+				</li>,
+			];
+		}
+	});
 
 	const courseAuthorsList = courseAuthors.map((authorId) => {
 		const mappedAuthor = authors.find((author) => author.id === authorId);
@@ -53,7 +57,7 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 		);
 	});
 
-	const createAuthorHandler = () => {
+	const handleCreateAuthor = () => {
 		const authorName = authorNameInputRef.current.value;
 		const uniqueId = String(Math.floor(Math.random() * new Date()));
 
@@ -66,31 +70,31 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 		}
 	};
 
-	const durationChangeHandler = () =>
+	const handleDurationChange = () =>
 		setCourseDuration(durationInputRef.current.value);
 
-	const durationKeydownHandler = (event) => {
+	const handleDurationKeydown = (event) => {
 		if (!DURATION_ALLOWED_KEYS.some((key) => key === event.key)) {
 			event.preventDefault();
 		}
 	};
 
-	const titleChangeHandler = () => setTitle(titleInputRef.current.value);
+	const handleTitleChange = () => setTitle(titleInputRef.current.value);
 
-	const descriptionChangeHandler = () =>
+	const handleDescriptionChange = () =>
 		setDescription(descriptionInputRef.current.value);
 
-	const submitFormHandler = (event) => {
+	const handleSubmitForm = (event) => {
 		event.preventDefault();
-		const titleValue = titleInputRef.current.value;
-		const descriptionValue = descriptionInputRef.current.value;
-		const durationValue = durationInputRef.current.value;
+		const title = titleInputRef.current.value;
+		const description = descriptionInputRef.current.value;
+		const duration = durationInputRef.current.value;
 		const id = String(Math.floor(Math.random() * new Date()));
-		const creationDate = dateGenerator.getCurrenDate();
+		const creationDate = dateGenerator.getCurrentDate();
 
-		const titleInputIsValid = titleValue.length > 0;
-		const descriptionInputIsValid = descriptionValue.length > 0;
-		const durationInputIsValid = durationValue.length > 0;
+		const titleInputIsValid = title.length > 0;
+		const descriptionInputIsValid = description.length > 0;
+		const durationInputIsValid = duration.length > 0;
 		const authorsIsNotEmpty = courseAuthors.length > 0;
 
 		const formIsValid =
@@ -102,9 +106,9 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 		if (formIsValid) {
 			onAddCourse({
 				id: id,
-				title: titleValue,
-				description: descriptionValue,
-				duration: Number(durationValue),
+				title: title,
+				description: description,
+				duration: Number(duration),
 				creationDate: creationDate,
 				authors: courseAuthors,
 			});
@@ -115,7 +119,7 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 
 	return (
 		<section>
-			<form onSubmit={submitFormHandler}>
+			<form onSubmit={handleSubmitForm}>
 				<div className={classes['title-row']}>
 					<div className={classes['form-control']}>
 						<label htmlFor='title'>{TEXT_CONSTANTS.TITLE_LABEL_TEXT}</label>
@@ -125,7 +129,7 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 							placeholder={TEXT_CONSTANTS.TITLE_PLACEHOLDER_TEXT}
 							id='title'
 							value={title}
-							onChange={titleChangeHandler}
+							onChange={handleTitleChange}
 						/>
 					</div>
 					<Button type='submit' text={TEXT_CONSTANTS.CREATE_COURSE_TEXT} />
@@ -139,7 +143,7 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 						rows='15'
 						placeholder='description text'
 						value={description}
-						onChange={descriptionChangeHandler}
+						onChange={handleDescriptionChange}
 					/>
 				</div>
 				<div className={classes['create-author']}>
@@ -161,7 +165,7 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 								/>
 							</div>
 							<Button
-								onClick={createAuthorHandler}
+								onClick={handleCreateAuthor}
 								className={classes['create-author__add-name-btn']}
 								text={TEXT_CONSTANTS.CREATE_AUTHOR_BTN_TEXT}
 							/>
@@ -183,8 +187,8 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 									{TEXT_CONSTANTS.DURATION_LABEL_TEXT}
 								</label>
 								<Input
-									onKeydown={durationKeydownHandler}
-									onChange={durationChangeHandler}
+									onKeydown={handleDurationKeydown}
+									onChange={handleDurationChange}
 									reference={durationInputRef}
 									placeholder={TEXT_CONSTANTS.DURATION_PLACEHOLDER_TEXT}
 									id='duration'

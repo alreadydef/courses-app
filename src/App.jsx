@@ -13,17 +13,17 @@ const App = () => {
 	const [filteredCourses, setFilteredCourses] = useState(courses);
 	const [isCreateCourseVisible, setCreateCourseVisible] = useState(false);
 
-	const searchHandler = (searchText) => setSearchText(searchText);
+	const handleSearch = (searchText) => setSearchText(searchText);
 
 	const addAuthor = (authorId) =>
 		setAuthors((prevAuthors) => [...prevAuthors, authorId]);
 
-	const addCourseHandler = (editCourse) => {
+	const handleAddCourse = (editCourse) => {
 		setCourses((prevCourses) => [...prevCourses, editCourse]);
 		setCreateCourseVisible(false);
 	};
 
-	const showCourseHandler = () =>
+	const handleShowCourse = () =>
 		setCreateCourseVisible((prevVisibility) => !prevVisibility);
 
 	useEffect(() => {
@@ -48,14 +48,14 @@ const App = () => {
 					<CreateCourse
 						onAddAuthor={addAuthor}
 						authors={authors}
-						onAddCourse={addCourseHandler}
+						onAddCourse={handleAddCourse}
 					/>
 				) : (
 					<Courses
 						authors={authors}
 						courses={filteredCourses}
-						onSearchHandler={searchHandler}
-						onAddHandler={showCourseHandler}
+						onSearchHandler={handleSearch}
+						onAddHandler={handleShowCourse}
 					/>
 				)}
 			</main>

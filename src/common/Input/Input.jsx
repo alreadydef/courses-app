@@ -19,7 +19,7 @@ const Input = ({
 			value={value}
 			ref={reference}
 			placeholder={placeholder}
-			className={`${classes.input} ${className ? className : ''}`}
+			className={`${classes.input} ${className || ''}`}
 		/>
 	);
 };

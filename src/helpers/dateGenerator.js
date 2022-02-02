@@ -1,5 +1,5 @@
 export const dateGenerator = {
-	getCurrenDate() {
+	getCurrentDate() {
 		const currentDate = new Date();
 		const monthShiftRatio = 1;
 		const currentMonth = currentDate.getMonth() + monthShiftRatio;
