@@ -1,0 +1,31 @@
+.header {
+    padding: 15px;
+    border: 2px solid var(--header-border-color);
+    margin: 20px auto;
+    max-width: var(--max-width-container);
+}
+
+.header__nav {
+    height: 100%;
+}
+
+.header__list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style: none;
+    gap: 26px;
+}
+
+.header__link {
+    text-decoration: none;
+    color: black;
+}
+
+.header__logo {
+    margin-right: auto;
+}
+
+.header__logout-btn {
+    font-size: 16px;
+}

@@ -1,0 +1,8 @@
+.main {
+    border: 2px solid var(--main-border-color);
+    padding: 15px;
+    flex-grow: 1;
+    margin: 20px auto;
+    max-width: var(--max-width-container);
+    min-height: calc(100vh - 213px);
+}
