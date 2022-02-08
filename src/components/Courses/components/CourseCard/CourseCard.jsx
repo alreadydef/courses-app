@@ -6,6 +6,8 @@ import { Button } from '../../../../common';
 
 import { TEXT_CONSTANTS } from '../../../../constants';
 
+import PropTypes from 'prop-types';
+
 const CourseCard = ({
 	title,
 	duration,
@@ -52,6 +54,15 @@ const CourseCard = ({
 			</div>
 		</li>
 	);
+};
+
+CourseCard.propTypes = {
+	title: PropTypes.string.isRequired,
+	duration: PropTypes.string.isRequired,
+	creationTime: PropTypes.string.isRequired,
+	description: PropTypes.string.isRequired,
+	authors: PropTypes.array.isRequired,
+	onShowCourse: PropTypes.func.isRequired,
 };
 
 export default CourseCard;

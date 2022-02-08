@@ -10,8 +10,11 @@
   --course-border-color: teal;
   --search-border-color: #FFB347;
   --description-border-color: yellow;
-  --create-course-section-border-color: black;
+  --create-course-section-border-color: #000;
+  --rediraction-link-color: #30D5C8;
   --max-width-container: 1324px;
+  --courses-link-color: #000;
+  --error-msg-color: red;
 }
 
 body {

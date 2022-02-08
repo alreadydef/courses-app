@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react';
 
-import { Header, Courses, CreateCourse } from './components';
+import {
+	Header,
+	Courses,
+	CreateCourse,
+	Registration,
+	Login,
+	CourseInfo,
+} from './components';
 
 import classes from './App.module.css';
 
-import { mockedCoursesList, mockedAuthorsList } from './constants';
+import { mockedCoursesList, mockedAuthorsList, ROUTES_PATH } from './constants';
+
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { useLoggedInStatus } from './hooks';
 
 const App = () => {
 	const [authors, setAuthors] = useState(mockedAuthorsList);
 	const [searchText, setSearchText] = useState('');
 	const [courses, setCourses] = useState(mockedCoursesList);
 	const [filteredCourses, setFilteredCourses] = useState(courses);
-	const [isCreateCourseVisible, setCreateCourseVisible] = useState(false);
+
+	const [isUserLoggedIn, handleLogout, setIsUserLoggedIn] = useLoggedInStatus();
+
+	const history = useHistory();
 
 	const handleSearch = (searchText) => setSearchText(searchText);
 
@@ -20,15 +33,11 @@ const App = () => {
 
 	const handleAddCourse = (editCourse) => {
 		setCourses((prevCourses) => [...prevCourses, editCourse]);
-		setCreateCourseVisible(false);
+		history.push(ROUTES_PATH.COURSES);
 	};
-
-	const handleShowCourse = () =>
-		setCreateCourseVisible((prevVisibility) => !prevVisibility);
 
 	useEffect(() => {
 		setFilteredCourses(courses);
-
 		if (searchText.length !== 0) {
 			setFilteredCourses((prevCourse) =>
 				prevCourse.filter((course) => {
@@ -42,22 +51,38 @@ const App = () => {
 
 	return (
 		<>
-			<Header />
+			<Header isUserLoggedIn={isUserLoggedIn} handleLogout={handleLogout} />
 			<main className={classes.main}>
-				{isCreateCourseVisible ? (
-					<CreateCourse
-						onAddAuthor={addAuthor}
-						authors={authors}
-						onAddCourse={handleAddCourse}
-					/>
-				) : (
-					<Courses
-						authors={authors}
-						courses={filteredCourses}
-						onSearchHandler={handleSearch}
-						onAddHandler={handleShowCourse}
-					/>
-				)}
+				<Switch>
+					<Route path={ROUTES_PATH.HOME} exact>
+						<Redirect
+							to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
+						/>
+					</Route>
+					<Route path={ROUTES_PATH.LOGIN}>
+						<Login setIsUserLoggedIn={setIsUserLoggedIn} />
+					</Route>
+					<Route path={ROUTES_PATH.REGISTRATION}>
+						<Registration />
+					</Route>
+					<Route path={ROUTES_PATH.ADD_COURSE} exact>
+						<CreateCourse
+							authors={authors}
+							onAddAuthor={addAuthor}
+							onAddCourse={handleAddCourse}
+						/>
+					</Route>
+					<Route path={ROUTES_PATH.COURSES} exact>
+						<Courses
+							authors={authors}
+							courses={filteredCourses}
+							onSearchHandler={handleSearch}
+						/>
+					</Route>
+					<Route path={ROUTES_PATH.COURSE_INFO}>
+						<CourseInfo courses={courses} authors={authors} />
+					</Route>
+				</Switch>
 			</main>
 		</>
 	);

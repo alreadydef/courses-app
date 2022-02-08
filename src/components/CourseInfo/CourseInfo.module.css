@@ -1,0 +1,30 @@
+.course-info {
+    flex-grow: 1;
+}
+
+.course-info__back-link {
+    color: var(--courses-link-color);
+    text-decoration: none;
+}
+
+.course-info__title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.course-info__content {
+    display: flex;
+    gap: 35px
+}
+
+.course-info__description {
+    flex: 0 0 65%;
+}
+
+.course-info__properties {
+    flex: 0 0 30%;
+}
+
+.course-info__label {
+    font-weight: bold;
+}
