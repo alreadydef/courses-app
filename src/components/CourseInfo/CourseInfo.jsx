@@ -6,19 +6,14 @@ import { Link, useParams } from 'react-router-dom';
 
 import { ROUTES_PATH, TEXT_CONSTANTS } from '../../constants';
 
-import { pipeDuration } from '../../helpers';
+import { getAuthorNames, pipeDuration } from '../../helpers';
 
 import PropTypes from 'prop-types';
 
 const CourseInfo = ({ courses, authors }) => {
 	const params = useParams();
 	const course = courses.find((course) => course.id === params.courseId);
-
-	const authorNames = course.authors.map((authorId) => {
-		const foundAuthor = authors.find((author) => author.id === authorId);
-
-		return foundAuthor.name;
-	});
+	const authorNames = getAuthorNames(course, authors);
 
 	return (
 		<section className={classes['course-info']}>
