@@ -61,6 +61,7 @@ export const TEXT_CONSTANTS = {
 	ADD_NEW_COURSE_BTN_TEXT: 'Add new course',
 	SEARCH_INPUT_PLACEHOLDER: 'Enter course name...',
 	SHOW_COURSE_TEXT: 'Show course',
+	COURSE_CARD_ID_TEXT: 'ID: ',
 	COURSE_CARD_AUTHORS_TEXT: 'Authors: ',
 	COURSE_CARD_DURATION_TEXT: 'Duration: ',
 	COURSE_CARD_CREATED_TEXT: 'Created: ',
@@ -83,6 +84,30 @@ export const TEXT_CONSTANTS = {
 	DURATION_MSG: 'Duration: ',
 	COURSE_AUTHORS_TITLE: 'Course authors',
 	EMPTY_AUTHORS_LIST_MSG: 'Author list is empty',
+	REGISTRATION_FORM_TITLE_TEXT: 'Registration',
+	REGISTRATION_NAME_LABEL_TEXT: 'Name',
+	REGISTRATION_NAME_PLACEHOLDER_TEXT: 'Enter name',
+	REGISTRATION_NAME_ID: 'name',
+	REGISTRATION_EMAIL_LABEL_TEXT: 'Email',
+	REGISTRATION_EMAIL_PLACEHOLDER_TEXT: 'Enter email',
+	REGISTRATION_EMAIL_ID: 'email',
+	REGISTRATION_PASSWORD_LABEL_TEXT: 'Password',
+	REGISTRATION_PASSWORD_PLACEHOLDER_TEXT: 'Enter password',
+	REGISTRATION_PASSWORD_ID: 'password',
+	REGISTRATION_SUBMIT_BTN_TEXT: 'Registration',
+	REGISTRATION_DISCLAIMER_TEXT: 'If you have an account you can ',
+	REGISTRATION_DISCLAIMER_LINK_TEXT: 'Login',
+	LOGIN_FORM_TITLE_TEXT: 'Login',
+	LOGIN_EMAIL_LABEL_TEXT: 'Email',
+	LOGIN_EMAIL_PLACEHOLDER_TEXT: 'Enter email',
+	LOGIN_EMAIL_ID: 'email',
+	LOGIN_PASSWORD_LABEL_TEXT: 'Password',
+	LOGIN_PASSWORD_PLACEHOLDER_TEXT: 'Enter password',
+	LOGIN_PASSWORD_ID: 'password',
+	LOGIN_SUBMIT_BTN_TEXT: 'Login',
+	LOGIN_DISCLAIMER_TEXT: 'If you have no account you can ',
+	LOGIN_DISCLAIMER_LINK_TEXT: 'Registration',
+	COURSE_INFO_BACK_LINK_TEXT: '< Back to courses',
 };
 
 export const DURATION_ALLOWED_KEYS = [
@@ -100,3 +125,24 @@ export const DURATION_ALLOWED_KEYS = [
 	'8',
 	'9',
 ];
+
+export const ROUTES_PATH = {
+	HOME: '/',
+	COURSES: '/courses',
+	COURSE_INFO: '/courses/:courseId',
+	ADD_COURSE: '/courses/add',
+	REGISTRATION: '/register',
+	LOGIN: '/login',
+};
+
+export const LOCALSTORAGE_KEYS = {
+	USER_TOKEN: 'USER_TOKEN',
+	USER_INFO: 'USER_INFO',
+};
+
+export const HOST = 'http://localhost:3000';
+
+export const URLs = {
+	LOGIN: 'login',
+	REGISTER: 'register',
+};

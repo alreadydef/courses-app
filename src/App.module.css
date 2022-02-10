@@ -1,4 +1,6 @@
 .main {
+    display: flex;
+    flex-direction: column;
     border: 2px solid var(--main-border-color);
     padding: 15px;
     flex-grow: 1;

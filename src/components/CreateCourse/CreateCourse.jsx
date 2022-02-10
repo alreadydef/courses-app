@@ -8,6 +8,8 @@ import { dateGenerator, pipeDuration } from '../../helpers';
 
 import { DURATION_ALLOWED_KEYS, TEXT_CONSTANTS } from '../../constants';
 
+import PropTypes from 'prop-types';
+
 const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 	const authorNameInputRef = useRef();
 	const durationInputRef = useRef();
@@ -221,6 +223,12 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 			</form>
 		</section>
 	);
+};
+
+CreateCourse.propTypes = {
+	authors: PropTypes.array.isRequired,
+	onAddAuthor: PropTypes.func.isRequired,
+	onAddCourse: PropTypes.func.isRequired,
 };
 
 export default CreateCourse;

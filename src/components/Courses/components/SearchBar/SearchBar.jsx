@@ -1,20 +1,23 @@
 import React, { useRef, useState } from 'react';
 
 import classes from './SearchBar.module.css';
-import { TEXT_CONSTANTS } from '../../../../constants';
+
+import { ROUTES_PATH, TEXT_CONSTANTS } from '../../../../constants';
 
 import { Button, Input } from '../../../../common';
+import { useHistory } from 'react-router-dom';
 
-const SearchBar = ({ onSearchHandler, onAddHandler }) => {
+const SearchBar = ({ onSearchHandler }) => {
 	const searchInputRef = useRef();
+	const history = useHistory();
 	const [searchValue, setSearchValue] = useState('');
 
-	const submitHandler = (event) => {
+	const handleSubmit = (event) => {
 		event.preventDefault();
 		onSearchHandler(searchInputRef.current.value);
 	};
 
-	const SearchChangeHandler = () => {
+	const handleSearchChange = () => {
 		setSearchValue(searchInputRef.current.value);
 
 		if (searchInputRef.current.value === '') {
@@ -22,19 +25,21 @@ const SearchBar = ({ onSearchHandler, onAddHandler }) => {
 		}
 	};
 
+	const handleAddCourse = () => history.push(ROUTES_PATH.ADD_COURSE);
+
 	return (
-		<form className={classes['search-bar']} onSubmit={submitHandler}>
+		<form className={classes['search-bar']} onSubmit={handleSubmit}>
 			<Input
 				placeholder={TEXT_CONSTANTS.SEARCH_INPUT_PLACEHOLDER}
 				reference={searchInputRef}
 				className={classes['search-bar__input']}
 				value={searchValue}
-				onChange={SearchChangeHandler}
+				onChange={handleSearchChange}
 			/>
 			<Button type='submit' text={TEXT_CONSTANTS.SEARCH_BTN_TEXT} />
 			<Button
 				text={TEXT_CONSTANTS.ADD_NEW_COURSE_BTN_TEXT}
-				onClick={onAddHandler}
+				onClick={handleAddCourse}
 				className={classes['search-bar__add-course-btn']}
 			/>
 		</form>

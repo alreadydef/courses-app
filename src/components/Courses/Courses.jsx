@@ -3,40 +3,46 @@ import React from 'react';
 import { CourseCard, SearchBar } from './components';
 
 import classes from './Courses.module.css';
-import { pipeDuration } from '../../helpers';
 
-const Courses = ({ onSearchHandler, onAddHandler, courses, authors }) => {
-	const switchAuthorIdsToNames = (authorIds) => {
-		const authorNames = authorIds.map((authorId) => {
-			const foundAuthor = authors.find((author) => author.id === authorId);
+import { getAuthorNames, pipeDuration } from '../../helpers';
 
-			return foundAuthor.name;
-		});
+import { useHistory } from 'react-router-dom';
 
-		return authorNames;
+import { ROUTES_PATH } from '../../constants';
+
+import PropTypes from 'prop-types';
+
+const Courses = ({ onSearchHandler, courses, authors }) => {
+	const history = useHistory();
+
+	const handleShowCourse = (id) => () => {
+		history.push(`${ROUTES_PATH.COURSES}/${id}`);
 	};
 
 	const mappedCourses = courses.map((course) => (
 		<CourseCard
 			key={course.id}
-			authors={switchAuthorIdsToNames(course.authors)}
+			authors={getAuthorNames(course, authors)}
 			title={course.title}
 			duration={pipeDuration(course.duration)}
 			description={course.description}
 			creationTime={course.creationDate}
-			onShowCourse={() => console.log('show course')}
+			onShowCourse={handleShowCourse(course.id)}
 		/>
 	));
 
 	return (
 		<section>
-			<SearchBar
-				onAddHandler={onAddHandler}
-				onSearchHandler={onSearchHandler}
-			/>
+			<SearchBar onSearchHandler={onSearchHandler} />
 			<ul className={classes['courses-list']}>{mappedCourses}</ul>
 		</section>
 	);
+};
+
+Courses.propTypes = {
+	onSearchHandler: PropTypes.func,
+	courses: PropTypes.array,
+	authors: PropTypes.array,
 };
 
 export default Courses;

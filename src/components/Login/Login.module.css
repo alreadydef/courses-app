@@ -1,0 +1,38 @@
+.login {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login__form-label {
+    text-align: center;
+}
+
+.login__form-control {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+}
+
+.login__form-actions {
+    text-align: center;
+    margin: 16px 0;
+}
+
+.login__form-link {
+    text-decoration: none;
+    color: var(--rediraction-link-color);
+    font-weight: bold;
+}
+
+.login__form-error-msg {
+    color: var(--error-msg-color);
+    margin-top: 15px;
+}
