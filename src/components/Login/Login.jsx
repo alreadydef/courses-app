@@ -7,32 +7,29 @@ import { Button, Input } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 
 import {
-	HOST,
 	ROUTES_PATH,
 	TEXT_CONSTANTS,
-	URLs,
 	LOCALSTORAGE_KEYS,
 } from '../../constants';
 
-import PropTypes from 'prop-types';
+import { loginUser } from '../../services';
 
-const Login = ({ setIsUserLoggedIn }) => {
+import { doLoginUser } from '../../store/user/actionCreators';
+
+import { useDispatch } from 'react-redux';
+
+const Login = () => {
 	const [errorMsg, setErrorMsg] = useState('');
 
 	const history = useHistory();
+	const dispatch = useDispatch();
 
 	const emailInputRef = useRef();
 	const passwordInputRef = useRef();
 
 	const sendLoginRequest = async (credentials) => {
 		setErrorMsg('');
-		const response = await fetch(`${HOST}/${URLs.LOGIN}`, {
-			method: 'POST',
-			body: JSON.stringify(credentials),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await loginUser(credentials);
 
 		const result = await response.json();
 
@@ -45,7 +42,15 @@ const Login = ({ setIsUserLoggedIn }) => {
 				LOCALSTORAGE_KEYS.USER_INFO,
 				JSON.stringify(result.user)
 			);
-			setIsUserLoggedIn(true);
+
+			dispatch(
+				doLoginUser({
+					token: result.result,
+					name: result.user.name,
+					email: result.user.email,
+				})
+			);
+
 			history.push(ROUTES_PATH.COURSES);
 		} else {
 			setErrorMsg(result.result);
@@ -113,10 +118,6 @@ const Login = ({ setIsUserLoggedIn }) => {
 			</form>
 		</section>
 	);
-};
-
-Login.propTypes = {
-	setIsUserLoggedIn: PropTypes.func.isRequired,
 };
 
 export default Login;

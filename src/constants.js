@@ -108,6 +108,7 @@ export const TEXT_CONSTANTS = {
 	LOGIN_DISCLAIMER_TEXT: 'If you have no account you can ',
 	LOGIN_DISCLAIMER_LINK_TEXT: 'Registration',
 	COURSE_INFO_BACK_LINK_TEXT: '< Back to courses',
+	BUTTON_ALT_TEXT: 'action button',
 };
 
 export const DURATION_ALLOWED_KEYS = [
@@ -145,4 +146,6 @@ export const HOST = 'http://localhost:3000';
 export const URLs = {
 	LOGIN: 'login',
 	REGISTER: 'register',
+	ALL_COURSES: 'courses/all',
+	ALL_AUTHORS: 'authors/all',
 };

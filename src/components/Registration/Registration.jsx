@@ -4,7 +4,8 @@ import classes from './Registration.module.css';
 import { Button, Input } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 
-import { HOST, ROUTES_PATH, TEXT_CONSTANTS, URLs } from '../../constants';
+import { ROUTES_PATH, TEXT_CONSTANTS } from '../../constants';
+import { registerUser } from '../../services';
 
 const Registration = () => {
 	const [errorMsg, setErrorMsg] = useState('');
@@ -17,13 +18,7 @@ const Registration = () => {
 
 	const sendRegisterRequest = async (credentials) => {
 		setErrorMsg('');
-		const response = await fetch(`${HOST}/${URLs.REGISTER}`, {
-			method: 'POST',
-			body: JSON.stringify(credentials),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await registerUser(credentials);
 
 		const result = await response.json();
 

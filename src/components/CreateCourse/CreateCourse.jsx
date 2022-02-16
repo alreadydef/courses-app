@@ -6,11 +6,26 @@ import { Button, Input } from '../../common';
 
 import { dateGenerator, pipeDuration } from '../../helpers';
 
-import { DURATION_ALLOWED_KEYS, TEXT_CONSTANTS } from '../../constants';
+import {
+	DURATION_ALLOWED_KEYS,
+	ROUTES_PATH,
+	TEXT_CONSTANTS,
+} from '../../constants';
 
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
+import { useHistory } from 'react-router-dom';
+
+import { doAddAuthor } from '../../store/authors/actionCreators';
+import { doAddCourse } from '../../store/courses/actionCreators';
+
+import { getAuthors } from '../../selectors';
+
+const CreateCourse = () => {
+	const dispatch = useDispatch();
+	const history = useHistory();
+
+	const authors = useSelector(getAuthors);
 	const authorNameInputRef = useRef();
 	const durationInputRef = useRef();
 	const titleInputRef = useRef();
@@ -64,10 +79,12 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 		const uniqueId = String(Math.floor(Math.random() * new Date()));
 
 		if (authorName !== '') {
-			onAddAuthor({
-				id: uniqueId,
-				name: authorName,
-			});
+			dispatch(
+				doAddAuthor({
+					id: uniqueId,
+					name: authorName,
+				})
+			);
 			authorNameInputRef.current.value = '';
 		}
 	};
@@ -106,14 +123,17 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 			authorsIsNotEmpty;
 
 		if (formIsValid) {
-			onAddCourse({
-				id: id,
-				title: title,
-				description: description,
-				duration: Number(duration),
-				creationDate: creationDate,
-				authors: courseAuthors,
-			});
+			dispatch(
+				doAddCourse({
+					id: id,
+					title: title,
+					description: description,
+					duration: Number(duration),
+					creationDate: creationDate,
+					authors: courseAuthors,
+				})
+			);
+			history.push(ROUTES_PATH.COURSES);
 		} else {
 			alert(TEXT_CONSTANTS.ALERT_ERROR_MSG);
 		}
@@ -223,12 +243,6 @@ const CreateCourse = ({ authors, onAddAuthor, onAddCourse }) => {
 			</form>
 		</section>
 	);
-};
-
-CreateCourse.propTypes = {
-	authors: PropTypes.array.isRequired,
-	onAddAuthor: PropTypes.func.isRequired,
-	onAddCourse: PropTypes.func.isRequired,
 };
 
 export default CreateCourse;
