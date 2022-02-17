@@ -1,8 +1,8 @@
 import { userTypes } from './actionTypes';
 
-export const doLoginUser = (credentials) => ({
+export const loginUserAction = (credentials) => ({
 	type: userTypes.LOGIN_USER,
 	payload: credentials,
 });
 
-export const doLogoutUser = () => ({ type: userTypes.LOGOUT_USER });
+export const logoutUserAction = () => ({ type: userTypes.LOGOUT_USER });

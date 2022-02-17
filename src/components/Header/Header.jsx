@@ -16,7 +16,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { doLogoutUser } from '../../store/user/actionCreators';
+import { logoutUserAction } from '../../store/user/actionCreators';
 
 import { getUserAuthStatus, getUserName } from '../../selectors';
 
@@ -30,7 +30,7 @@ const Header = () => {
 	const handleLogout = () => {
 		localStorage.removeItem(LOCALSTORAGE_KEYS.USER_INFO);
 		localStorage.removeItem(LOCALSTORAGE_KEYS.USER_TOKEN);
-		dispatch(doLogoutUser());
+		dispatch(logoutUserAction());
 		history.replace(ROUTES_PATH.LOGIN);
 	};
 

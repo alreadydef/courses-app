@@ -14,7 +14,7 @@ import {
 
 import { loginUser } from '../../services';
 
-import { doLoginUser } from '../../store/user/actionCreators';
+import { loginUserAction } from '../../store/user/actionCreators';
 
 import { useDispatch } from 'react-redux';
 
@@ -34,22 +34,16 @@ const Login = () => {
 		const result = await response.json();
 
 		if (response.ok) {
-			localStorage.setItem(
-				LOCALSTORAGE_KEYS.USER_TOKEN,
-				JSON.stringify(result.result)
-			);
-			localStorage.setItem(
-				LOCALSTORAGE_KEYS.USER_INFO,
-				JSON.stringify(result.user)
-			);
+			const {
+				result: token,
+				user,
+				user: { name, email },
+			} = result;
 
-			dispatch(
-				doLoginUser({
-					token: result.result,
-					name: result.user.name,
-					email: result.user.email,
-				})
-			);
+			localStorage.setItem(LOCALSTORAGE_KEYS.USER_TOKEN, JSON.stringify(token));
+			localStorage.setItem(LOCALSTORAGE_KEYS.USER_INFO, JSON.stringify(user));
+
+			dispatch(loginUserAction({ token, name, email }));
 
 			history.push(ROUTES_PATH.COURSES);
 		} else {

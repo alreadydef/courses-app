@@ -4,7 +4,7 @@ const coursesInitialState = [];
 
 export const coursesReducer = (state = coursesInitialState, action) => {
 	switch (action.type) {
-		case coursesTypes.SET_ALL_COURSES:
+		case coursesTypes.FETCH_ALL_COURSES:
 			return action.payload;
 		case coursesTypes.ADD_COURSE:
 			return [...state, action.payload];

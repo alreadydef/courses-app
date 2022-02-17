@@ -11,9 +11,7 @@ const Button = ({ text, onClick, className, type, imgSrc }) => {
 			type={type ? type : 'button'}
 			onClick={onClick}
 		>
-			{text ? (
-				text
-			) : (
+			{text || (
 				<img
 					className={`${classes['btn__img-content']}`}
 					src={imgSrc}

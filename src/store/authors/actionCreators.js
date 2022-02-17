@@ -1,11 +1,11 @@
 import { authorsTypes } from './actionTypes';
 
-export const doGetAllAuthors = (authors) => ({
-	type: authorsTypes.SET_ALL_AUTHORS,
+export const getAllAuthorsAction = (authors) => ({
+	type: authorsTypes.FETCH_ALL_AUTHORS,
 	payload: authors,
 });
 
-export const doAddAuthor = (author) => ({
+export const addAuthorAction = (author) => ({
 	type: authorsTypes.ADD_AUTHOR,
 	payload: author,
 });

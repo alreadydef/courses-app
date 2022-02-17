@@ -13,7 +13,7 @@ import { ROUTES_PATH } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAuthors, getCourses } from '../../selectors';
-import { doDeleteCourse } from '../../store/courses/actionCreators';
+import { deleteCourseAction } from '../../store/courses/actionCreators';
 
 const Courses = () => {
 	const history = useHistory();
@@ -33,7 +33,7 @@ const Courses = () => {
 	const handleEditCourse = (id) => () => {};
 
 	const handleDeleteCourse = (id) => () => {
-		dispatch(doDeleteCourse(id));
+		dispatch(deleteCourseAction(id));
 	};
 
 	useEffect(() => {
@@ -49,7 +49,7 @@ const Courses = () => {
 		}
 	}, [searchText, courses]);
 
-	const mappedCourses = filteredCourses.map((course) => (
+	const courseCards = filteredCourses.map((course) => (
 		<CourseCard
 			key={course.id}
 			authors={getAuthorNames(course, authors)}
@@ -66,7 +66,7 @@ const Courses = () => {
 	return (
 		<section>
 			<SearchBar onSearchHandler={handleSearch} />
-			<ul className={classes['courses-list']}>{mappedCourses}</ul>
+			<ul className={classes['courses-list']}>{courseCards}</ul>
 		</section>
 	);
 };

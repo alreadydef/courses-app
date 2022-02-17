@@ -16,8 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useHistory } from 'react-router-dom';
 
-import { doAddAuthor } from '../../store/authors/actionCreators';
-import { doAddCourse } from '../../store/courses/actionCreators';
+import { addAuthorAction } from '../../store/authors/actionCreators';
+import { addCourseAction } from '../../store/courses/actionCreators';
 
 import { getAuthors } from '../../selectors';
 
@@ -80,7 +80,7 @@ const CreateCourse = () => {
 
 		if (authorName !== '') {
 			dispatch(
-				doAddAuthor({
+				addAuthorAction({
 					id: uniqueId,
 					name: authorName,
 				})
@@ -124,7 +124,7 @@ const CreateCourse = () => {
 
 		if (formIsValid) {
 			dispatch(
-				doAddCourse({
+				addCourseAction({
 					id: id,
 					title: title,
 					description: description,

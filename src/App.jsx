@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
 	Header,
@@ -19,26 +19,27 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllAuthors, getAllCourses } from './services';
 
-import { doGetAllCourses } from './store/courses/actionCreators';
+import { getAllCoursesAction } from './store/courses/actionCreators';
 
-import { doGetAllAuthors } from './store/authors/actionCreators';
-import { doLoginUser } from './store/user/actionCreators';
+import { getAllAuthorsAction } from './store/authors/actionCreators';
+import { loginUserAction } from './store/user/actionCreators';
 import { getUserAuthStatus } from './selectors';
 
 const App = () => {
 	const isUserLoggedIn = useSelector(getUserAuthStatus);
 	const dispatch = useDispatch();
+	const retrieveTokenCounterRef = useRef(0);
 
 	useEffect(() => {
 		getAllAuthors()
 			.then((response) => response.json())
-			.then((data) => dispatch(doGetAllAuthors(data.result)));
+			.then((data) => dispatch(getAllAuthorsAction(data.result)));
 	}, [dispatch]);
 
 	useEffect(() => {
 		getAllCourses()
 			.then((response) => response.json())
-			.then((data) => dispatch(doGetAllCourses(data.result)));
+			.then((data) => dispatch(getAllCoursesAction(data.result)));
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -49,13 +50,14 @@ const App = () => {
 
 		if (token && userData) {
 			dispatch(
-				doLoginUser({
+				loginUserAction({
 					token: token,
 					name: userData.name,
 					email: userData.email,
 				})
 			);
 		}
+		retrieveTokenCounterRef.current++;
 	}, [dispatch]);
 
 	return (
@@ -64,9 +66,11 @@ const App = () => {
 			<main className={classes.main}>
 				<Switch>
 					<Route path={ROUTES_PATH.HOME} exact>
-						<Redirect
-							to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
-						/>
+						{retrieveTokenCounterRef.current > 0 && (
+							<Redirect
+								to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
+							/>
+						)}
 					</Route>
 					<Route path={ROUTES_PATH.LOGIN}>
 						<Login />
