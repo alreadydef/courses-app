@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
 	Header,
@@ -11,76 +11,81 @@ import {
 
 import classes from './App.module.css';
 
-import { mockedCoursesList, mockedAuthorsList, ROUTES_PATH } from './constants';
+import { LOCALSTORAGE_KEYS, ROUTES_PATH } from './constants';
 
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
-import { useLoggedInStatus } from './hooks';
+import { Redirect, Route, Switch } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getAllAuthors, getAllCourses } from './services';
+
+import { getAllCoursesAction } from './store/courses/actionCreators';
+
+import { getAllAuthorsAction } from './store/authors/actionCreators';
+import { loginUserAction } from './store/user/actionCreators';
+import { getUserAuthStatus } from './selectors';
 
 const App = () => {
-	const [authors, setAuthors] = useState(mockedAuthorsList);
-	const [searchText, setSearchText] = useState('');
-	const [courses, setCourses] = useState(mockedCoursesList);
-	const [filteredCourses, setFilteredCourses] = useState(courses);
-
-	const [isUserLoggedIn, handleLogout, setIsUserLoggedIn] = useLoggedInStatus();
-
-	const history = useHistory();
-
-	const handleSearch = (searchText) => setSearchText(searchText);
-
-	const addAuthor = (authorId) =>
-		setAuthors((prevAuthors) => [...prevAuthors, authorId]);
-
-	const handleAddCourse = (editCourse) => {
-		setCourses((prevCourses) => [...prevCourses, editCourse]);
-		history.push(ROUTES_PATH.COURSES);
-	};
+	const isUserLoggedIn = useSelector(getUserAuthStatus);
+	const dispatch = useDispatch();
+	const retrieveTokenCounterRef = useRef(0);
 
 	useEffect(() => {
-		setFilteredCourses(courses);
-		if (searchText.length !== 0) {
-			setFilteredCourses((prevCourse) =>
-				prevCourse.filter((course) => {
-					return (
-						course.title.includes(searchText) || course.id.includes(searchText)
-					);
+		getAllAuthors()
+			.then((response) => response.json())
+			.then((data) => dispatch(getAllAuthorsAction(data.result)));
+	}, [dispatch]);
+
+	useEffect(() => {
+		getAllCourses()
+			.then((response) => response.json())
+			.then((data) => dispatch(getAllCoursesAction(data.result)));
+	}, [dispatch]);
+
+	useEffect(() => {
+		const token = localStorage.getItem(LOCALSTORAGE_KEYS.USER_TOKEN);
+		const userData = JSON.parse(
+			localStorage.getItem(LOCALSTORAGE_KEYS.USER_INFO)
+		);
+
+		if (token && userData) {
+			dispatch(
+				loginUserAction({
+					token: token,
+					name: userData.name,
+					email: userData.email,
 				})
 			);
 		}
-	}, [searchText, courses]);
+		retrieveTokenCounterRef.current++;
+	}, [dispatch]);
 
 	return (
 		<>
-			<Header isUserLoggedIn={isUserLoggedIn} handleLogout={handleLogout} />
+			<Header />
 			<main className={classes.main}>
 				<Switch>
 					<Route path={ROUTES_PATH.HOME} exact>
-						<Redirect
-							to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
-						/>
+						{retrieveTokenCounterRef.current > 0 && (
+							<Redirect
+								to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
+							/>
+						)}
 					</Route>
 					<Route path={ROUTES_PATH.LOGIN}>
-						<Login setIsUserLoggedIn={setIsUserLoggedIn} />
+						<Login />
 					</Route>
 					<Route path={ROUTES_PATH.REGISTRATION}>
 						<Registration />
 					</Route>
 					<Route path={ROUTES_PATH.ADD_COURSE} exact>
-						<CreateCourse
-							authors={authors}
-							onAddAuthor={addAuthor}
-							onAddCourse={handleAddCourse}
-						/>
+						<CreateCourse />
 					</Route>
 					<Route path={ROUTES_PATH.COURSES} exact>
-						<Courses
-							authors={authors}
-							courses={filteredCourses}
-							onSearchHandler={handleSearch}
-						/>
+						<Courses />
 					</Route>
 					<Route path={ROUTES_PATH.COURSE_INFO}>
-						<CourseInfo courses={courses} authors={authors} />
+						<CourseInfo />
 					</Route>
 				</Switch>
 			</main>

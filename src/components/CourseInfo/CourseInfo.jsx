@@ -8,9 +8,13 @@ import { ROUTES_PATH, TEXT_CONSTANTS } from '../../constants';
 
 import { getAuthorNames, pipeDuration } from '../../helpers';
 
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const CourseInfo = ({ courses, authors }) => {
+import { getAuthors, getCourses } from '../../selectors';
+
+const CourseInfo = () => {
+	const authors = useSelector(getAuthors);
+	const courses = useSelector(getCourses);
 	const params = useParams();
 	const course = courses.find((course) => course.id === params.courseId);
 	const authorNames = getAuthorNames(course, authors);
@@ -61,11 +65,6 @@ const CourseInfo = ({ courses, authors }) => {
 			</div>
 		</section>
 	);
-};
-
-CourseInfo.propTypes = {
-	courses: PropTypes.array,
-	authors: PropTypes.array,
 };
 
 export default CourseInfo;

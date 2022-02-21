@@ -6,6 +6,10 @@ import { Button } from '../../../../common';
 
 import { TEXT_CONSTANTS } from '../../../../constants';
 
+import editSrc from '../../../../assets/edit.png';
+
+import deleteSrc from '../../../../assets/delete.png';
+
 import PropTypes from 'prop-types';
 
 const CourseCard = ({
@@ -15,6 +19,8 @@ const CourseCard = ({
 	description,
 	authors,
 	onShowCourse,
+	onEditCourse,
+	onDeleteCourse,
 }) => {
 	const formattedCreationDate = creationTime.split('/').join('.');
 
@@ -50,6 +56,8 @@ const CourseCard = ({
 						text={TEXT_CONSTANTS.SHOW_COURSE_TEXT}
 						onClick={onShowCourse}
 					/>
+					<Button imgSrc={editSrc} onClick={onEditCourse} />
+					<Button imgSrc={deleteSrc} onClick={onDeleteCourse} />
 				</div>
 			</div>
 		</li>
@@ -63,6 +71,8 @@ CourseCard.propTypes = {
 	description: PropTypes.string.isRequired,
 	authors: PropTypes.array.isRequired,
 	onShowCourse: PropTypes.func.isRequired,
+	onEditCourse: PropTypes.func.isRequired,
+	onDeleteCourse: PropTypes.func.isRequired,
 };
 
 export default CourseCard;

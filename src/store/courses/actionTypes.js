@@ -1,0 +1,5 @@
+export const coursesTypes = {
+	FETCH_ALL_COURSES: 'FETCH_ALL_COURSES',
+	ADD_COURSE: 'ADD_COURSE',
+	DELETE_COURSE: 'DELETE_COURSE',
+};

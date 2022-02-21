@@ -29,7 +29,9 @@
 }
 
 .secondary-info__actions {
-    text-align: center;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
 }
 
 .secondary-info__points {
