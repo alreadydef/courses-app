@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import {
 	Header,
 	Courses,
-	CreateCourse,
+	CourseForm,
 	Registration,
 	Login,
 	CourseInfo,
+	PrivateRoute,
 } from './components';
 
 import classes from './App.module.css';
@@ -15,35 +16,19 @@ import { LOCALSTORAGE_KEYS, ROUTES_PATH } from './constants';
 
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { getAllAuthors, getAllCourses } from './services';
-
-import { getAllCoursesAction } from './store/courses/actionCreators';
-
-import { getAllAuthorsAction } from './store/authors/actionCreators';
 import { loginUserAction } from './store/user/actionCreators';
-import { getUserAuthStatus } from './selectors';
+
+import { sendRoleRequestAction } from './store/user/thunk';
+import { fetchAllAuthorsAction } from './store/authors/thunk';
+import { fetchAllCourses } from './store/courses/thunk';
 
 const App = () => {
-	const isUserLoggedIn = useSelector(getUserAuthStatus);
+	const token = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEYS.USER_TOKEN));
 	const dispatch = useDispatch();
-	const retrieveTokenCounterRef = useRef(0);
 
 	useEffect(() => {
-		getAllAuthors()
-			.then((response) => response.json())
-			.then((data) => dispatch(getAllAuthorsAction(data.result)));
-	}, [dispatch]);
-
-	useEffect(() => {
-		getAllCourses()
-			.then((response) => response.json())
-			.then((data) => dispatch(getAllCoursesAction(data.result)));
-	}, [dispatch]);
-
-	useEffect(() => {
-		const token = localStorage.getItem(LOCALSTORAGE_KEYS.USER_TOKEN);
 		const userData = JSON.parse(
 			localStorage.getItem(LOCALSTORAGE_KEYS.USER_INFO)
 		);
@@ -56,8 +41,17 @@ const App = () => {
 					email: userData.email,
 				})
 			);
+
+			dispatch(sendRoleRequestAction(token));
 		}
-		retrieveTokenCounterRef.current++;
+	}, [dispatch, token]);
+
+	useEffect(() => {
+		dispatch(fetchAllAuthorsAction);
+	}, [dispatch]);
+
+	useEffect(() => {
+		dispatch(fetchAllCourses);
 	}, [dispatch]);
 
 	return (
@@ -66,11 +60,7 @@ const App = () => {
 			<main className={classes.main}>
 				<Switch>
 					<Route path={ROUTES_PATH.HOME} exact>
-						{retrieveTokenCounterRef.current > 0 && (
-							<Redirect
-								to={isUserLoggedIn ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN}
-							/>
-						)}
+						<Redirect to={token ? ROUTES_PATH.COURSES : ROUTES_PATH.LOGIN} />
 					</Route>
 					<Route path={ROUTES_PATH.LOGIN}>
 						<Login />
@@ -78,13 +68,16 @@ const App = () => {
 					<Route path={ROUTES_PATH.REGISTRATION}>
 						<Registration />
 					</Route>
-					<Route path={ROUTES_PATH.ADD_COURSE} exact>
-						<CreateCourse />
-					</Route>
+					<PrivateRoute path={ROUTES_PATH.ADD_COURSE}>
+						<CourseForm />
+					</PrivateRoute>
+					<PrivateRoute path={ROUTES_PATH.UPDATE_COURSE}>
+						<CourseForm />
+					</PrivateRoute>
 					<Route path={ROUTES_PATH.COURSES} exact>
 						<Courses />
 					</Route>
-					<Route path={ROUTES_PATH.COURSE_INFO}>
+					<Route path={ROUTES_PATH.COURSE_INFO} exact>
 						<CourseInfo />
 					</Route>
 				</Switch>

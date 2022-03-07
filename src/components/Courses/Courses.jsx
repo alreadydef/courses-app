@@ -8,12 +8,13 @@ import { getAuthorNames, pipeDuration } from '../../helpers';
 
 import { useHistory } from 'react-router-dom';
 
-import { ROUTES_PATH } from '../../constants';
+import { ROLES, ROUTES_PATH } from '../../constants';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAuthors, getCourses } from '../../selectors';
-import { deleteCourseAction } from '../../store/courses/actionCreators';
+import { getAuthors, getCourses, getUserRole } from '../../selectors';
+
+import { removeCourseAction } from '../../store/courses/thunk';
 
 const Courses = () => {
 	const history = useHistory();
@@ -21,6 +22,8 @@ const Courses = () => {
 
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
+	const userRole = useSelector(getUserRole);
+
 	const [searchText, setSearchText] = useState('');
 	const [filteredCourses, setFilteredCourses] = useState(courses);
 
@@ -30,10 +33,12 @@ const Courses = () => {
 		history.push(`${ROUTES_PATH.COURSES}/${id}`);
 	};
 
-	const handleEditCourse = (id) => () => {};
+	const handleEditCourse = (id) => () => {
+		history.push(`${ROUTES_PATH.COURSES}/update/${id}`);
+	};
 
 	const handleDeleteCourse = (id) => () => {
-		dispatch(deleteCourseAction(id));
+		dispatch(removeCourseAction(id));
 	};
 
 	useEffect(() => {
@@ -60,12 +65,16 @@ const Courses = () => {
 			onShowCourse={handleShowCourse(course.id)}
 			onDeleteCourse={handleDeleteCourse(course.id)}
 			onEditCourse={handleEditCourse(course.id)}
+			isAdminRole={userRole === ROLES.ADMIN}
 		/>
 	));
 
 	return (
 		<section>
-			<SearchBar onSearchHandler={handleSearch} />
+			<SearchBar
+				onSearchHandler={handleSearch}
+				isAdminRole={userRole === ROLES.ADMIN}
+			/>
 			<ul className={classes['courses-list']}>{courseCards}</ul>
 		</section>
 	);

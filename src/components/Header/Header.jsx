@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Logo } from './components';
 
@@ -16,13 +16,14 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { logoutUserAction } from '../../store/user/actionCreators';
-
 import { getUserAuthStatus, getUserName } from '../../selectors';
+
+import { sendLogoutRequestAction } from '../../store/user/thunk';
 
 const Header = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const [logoutIsSending, setLogoutIsSending] = useState(false);
 
 	const isUserLoggedIn = useSelector(getUserAuthStatus);
 	const userName = useSelector(getUserName);
@@ -30,9 +31,16 @@ const Header = () => {
 	const handleLogout = () => {
 		localStorage.removeItem(LOCALSTORAGE_KEYS.USER_INFO);
 		localStorage.removeItem(LOCALSTORAGE_KEYS.USER_TOKEN);
-		dispatch(logoutUserAction());
-		history.replace(ROUTES_PATH.LOGIN);
+		setLogoutIsSending(true);
+		dispatch(sendLogoutRequestAction());
 	};
+
+	useEffect(() => {
+		if (logoutIsSending && !isUserLoggedIn) {
+			history.replace(ROUTES_PATH.LOGIN);
+			setLogoutIsSending(false);
+		}
+	}, [logoutIsSending, isUserLoggedIn, history]);
 
 	return (
 		<header className={classes.header}>

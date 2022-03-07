@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-import classes from './CreateCourse.module.css';
+import classes from './CourseForm.module.css';
 
 import { Button, Input } from '../../common';
 
@@ -14,27 +14,41 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { addAuthorAction } from '../../store/authors/actionCreators';
-import { addCourseAction } from '../../store/courses/actionCreators';
+import { getAuthors, getCourses } from '../../selectors';
 
-import { getAuthors } from '../../selectors';
+import { createAuthorAction } from '../../store/authors/thunk';
+import {
+	createCourseAction,
+	sendUpdateCourseAction,
+} from '../../store/courses/thunk';
 
-const CreateCourse = () => {
+const CourseForm = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const { courseId } = useParams();
 
 	const authors = useSelector(getAuthors);
+	const courses = useSelector(getCourses);
+
+	const selectedCourse = courses.find((course) => course.id === courseId) || {};
+
 	const authorNameInputRef = useRef();
 	const durationInputRef = useRef();
 	const titleInputRef = useRef();
 	const descriptionInputRef = useRef();
 
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [courseAuthors, setCourseAuthors] = useState([]);
-	const [courseDuration, setCourseDuration] = useState('');
+	const [title, setTitle] = useState(selectedCourse.title || '');
+	const [description, setDescription] = useState(
+		selectedCourse.description || ''
+	);
+	const [courseAuthors, setCourseAuthors] = useState(
+		selectedCourse.authors || []
+	);
+	const [courseDuration, setCourseDuration] = useState(
+		selectedCourse.duration || ''
+	);
 
 	const addAuthor = (authorId) => () =>
 		setCourseAuthors((prevCourseAuthors) => [...prevCourseAuthors, authorId]);
@@ -76,15 +90,10 @@ const CreateCourse = () => {
 
 	const handleCreateAuthor = () => {
 		const authorName = authorNameInputRef.current.value;
-		const uniqueId = String(Math.floor(Math.random() * new Date()));
 
 		if (authorName !== '') {
-			dispatch(
-				addAuthorAction({
-					id: uniqueId,
-					name: authorName,
-				})
-			);
+			dispatch(createAuthorAction(authorName));
+
 			authorNameInputRef.current.value = '';
 		}
 	};
@@ -108,7 +117,6 @@ const CreateCourse = () => {
 		const title = titleInputRef.current.value;
 		const description = descriptionInputRef.current.value;
 		const duration = durationInputRef.current.value;
-		const id = String(Math.floor(Math.random() * new Date()));
 		const creationDate = dateGenerator.getCurrentDate();
 
 		const titleInputIsValid = title.length > 0;
@@ -122,10 +130,23 @@ const CreateCourse = () => {
 			durationInputIsValid &&
 			authorsIsNotEmpty;
 
-		if (formIsValid) {
+		if (formIsValid && courseId) {
 			dispatch(
-				addCourseAction({
-					id: id,
+				sendUpdateCourseAction(
+					{
+						title: title,
+						description: description,
+						duration: Number(duration),
+						creationDate: creationDate,
+						authors: courseAuthors,
+					},
+					courseId
+				)
+			);
+			history.push(ROUTES_PATH.COURSES);
+		} else if (formIsValid && !courseId) {
+			dispatch(
+				createCourseAction({
 					title: title,
 					description: description,
 					duration: Number(duration),
@@ -154,7 +175,14 @@ const CreateCourse = () => {
 							onChange={handleTitleChange}
 						/>
 					</div>
-					<Button type='submit' text={TEXT_CONSTANTS.CREATE_COURSE_TEXT} />
+					<Button
+						type='submit'
+						text={
+							courseId
+								? TEXT_CONSTANTS.UPDATE_COURSE_TEXT
+								: TEXT_CONSTANTS.CREATE_COURSE_TEXT
+						}
+					/>
 				</div>
 				<div className={classes['form-control']}>
 					<label htmlFor='description'>Description</label>
@@ -214,7 +242,7 @@ const CreateCourse = () => {
 									reference={durationInputRef}
 									placeholder={TEXT_CONSTANTS.DURATION_PLACEHOLDER_TEXT}
 									id='duration'
-									value={courseDuration}
+									value={String(courseDuration)}
 								/>
 							</div>
 						</div>
@@ -245,4 +273,4 @@ const CreateCourse = () => {
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

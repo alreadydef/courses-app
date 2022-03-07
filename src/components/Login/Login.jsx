@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import classes from './Login.module.css';
 
@@ -6,20 +6,17 @@ import { Button, Input } from '../../common';
 
 import { Link, useHistory } from 'react-router-dom';
 
-import {
-	ROUTES_PATH,
-	TEXT_CONSTANTS,
-	LOCALSTORAGE_KEYS,
-} from '../../constants';
+import { ROUTES_PATH, TEXT_CONSTANTS } from '../../constants';
 
-import { loginUser } from '../../services';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { loginUserAction } from '../../store/user/actionCreators';
+import { getUserAuthStatus, getUserErrorStatus } from '../../selectors';
 
-import { useDispatch } from 'react-redux';
+import { sendLoginRequestAction } from '../../store/user/thunk';
 
 const Login = () => {
-	const [errorMsg, setErrorMsg] = useState('');
+	const authStatus = useSelector(getUserAuthStatus);
+	const errorMsg = useSelector(getUserErrorStatus);
 
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -27,28 +24,14 @@ const Login = () => {
 	const emailInputRef = useRef();
 	const passwordInputRef = useRef();
 
-	const sendLoginRequest = async (credentials) => {
-		setErrorMsg('');
-		const response = await loginUser(credentials);
-
-		const result = await response.json();
-
-		if (response.ok) {
-			const {
-				result: token,
-				user,
-				user: { name, email },
-			} = result;
-
-			localStorage.setItem(LOCALSTORAGE_KEYS.USER_TOKEN, JSON.stringify(token));
-			localStorage.setItem(LOCALSTORAGE_KEYS.USER_INFO, JSON.stringify(user));
-
-			dispatch(loginUserAction({ token, name, email }));
-
+	useEffect(() => {
+		if (authStatus) {
 			history.push(ROUTES_PATH.COURSES);
-		} else {
-			setErrorMsg(result.result);
 		}
+	}, [authStatus, history]);
+
+	const sendLoginRequest = (credentials) => {
+		dispatch(sendLoginRequestAction(credentials));
 	};
 
 	const handleSubmit = (event) => {
