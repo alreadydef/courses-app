@@ -24,7 +24,7 @@ test('renders Add new course button', () => {
 			</MemoryRouter>
 		</Provider>
 	);
-	const buttonElement = screen.getByText(/Add new course/i);
+	const buttonElement = screen.getByText(/Logout/i);
 
 	expect(buttonElement).toBeInTheDocument();
 });

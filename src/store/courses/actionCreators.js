@@ -14,3 +14,8 @@ export const deleteCourseAction = (courseId) => ({
 	type: coursesTypes.DELETE_COURSE,
 	payload: courseId,
 });
+
+export const updateCourseAction = (course) => ({
+	type: coursesTypes.UPDATE_COURSE,
+	payload: course,
+});

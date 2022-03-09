@@ -21,6 +21,7 @@ const CourseCard = ({
 	onShowCourse,
 	onEditCourse,
 	onDeleteCourse,
+	isAdminRole,
 }) => {
 	const formattedCreationDate = creationTime.split('/').join('.');
 
@@ -56,8 +57,12 @@ const CourseCard = ({
 						text={TEXT_CONSTANTS.SHOW_COURSE_TEXT}
 						onClick={onShowCourse}
 					/>
-					<Button imgSrc={editSrc} onClick={onEditCourse} />
-					<Button imgSrc={deleteSrc} onClick={onDeleteCourse} />
+					{isAdminRole && (
+						<>
+							<Button imgSrc={editSrc} onClick={onEditCourse} />
+							<Button imgSrc={deleteSrc} onClick={onDeleteCourse} />
+						</>
+					)}
 				</div>
 			</div>
 		</li>
@@ -73,6 +78,7 @@ CourseCard.propTypes = {
 	onShowCourse: PropTypes.func.isRequired,
 	onEditCourse: PropTypes.func.isRequired,
 	onDeleteCourse: PropTypes.func.isRequired,
+	isAdminRole: PropTypes.bool.isRequired,
 };
 
 export default CourseCard;

@@ -1,6 +1,8 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
+
+import thunk from 'redux-thunk';
 
 import { userReducer } from './user/reducer';
 import { coursesReducer } from './courses/reducer';
@@ -12,5 +14,5 @@ export const store = createStore(
 		courses: coursesReducer,
 		authors: authorsReducer,
 	}),
-	composeWithDevTools()
+	composeWithDevTools(applyMiddleware(thunk))
 );

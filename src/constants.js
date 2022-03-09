@@ -71,6 +71,7 @@ export const TEXT_CONSTANTS = {
 	TITLE_LABEL_TEXT: 'title',
 	TITLE_PLACEHOLDER_TEXT: 'Enter title...',
 	CREATE_COURSE_TEXT: 'Create course',
+	UPDATE_COURSE_TEXT: 'Update course',
 	DESCRIPTION_LABEL_TEXT: 'Description',
 	DESCRIPTION_PLACEHOLDER_TEXT: 'enter course description...',
 	ADD_AUTHOR_TITLE: 'Add author',
@@ -132,6 +133,7 @@ export const ROUTES_PATH = {
 	COURSES: '/courses',
 	COURSE_INFO: '/courses/:courseId',
 	ADD_COURSE: '/courses/add',
+	UPDATE_COURSE: '/courses/update/:courseId',
 	REGISTRATION: '/register',
 	LOGIN: '/login',
 };
@@ -145,7 +147,16 @@ export const HOST = 'http://localhost:3000';
 
 export const URLs = {
 	LOGIN: 'login',
+	LOGOUT: 'logout',
 	REGISTER: 'register',
 	ALL_COURSES: 'courses/all',
 	ALL_AUTHORS: 'authors/all',
+	ADD_AUTHOR: 'authors/add',
+	ADD_COURSE: 'courses/add',
+	CURRENT_ROLE: 'users/me',
+};
+
+export const ROLES = {
+	ADMIN: 'admin',
+	USER: 'user',
 };
