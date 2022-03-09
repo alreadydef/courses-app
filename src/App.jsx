@@ -36,7 +36,7 @@ const App = () => {
 		if (token && userData) {
 			dispatch(
 				loginUserAction({
-					token: token,
+					token,
 					name: userData.name,
 					email: userData.email,
 				})
@@ -48,9 +48,6 @@ const App = () => {
 
 	useEffect(() => {
 		dispatch(fetchAllAuthorsAction);
-	}, [dispatch]);
-
-	useEffect(() => {
 		dispatch(fetchAllCourses);
 	}, [dispatch]);
 

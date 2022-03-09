@@ -134,10 +134,10 @@ const CourseForm = () => {
 			dispatch(
 				sendUpdateCourseAction(
 					{
-						title: title,
-						description: description,
+						title,
+						description,
 						duration: Number(duration),
-						creationDate: creationDate,
+						creationDate,
 						authors: courseAuthors,
 					},
 					courseId
@@ -147,10 +147,10 @@ const CourseForm = () => {
 		} else if (formIsValid && !courseId) {
 			dispatch(
 				createCourseAction({
-					title: title,
-					description: description,
+					title,
+					description,
 					duration: Number(duration),
-					creationDate: creationDate,
+					creationDate,
 					authors: courseAuthors,
 				})
 			);

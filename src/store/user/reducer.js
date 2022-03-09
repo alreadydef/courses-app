@@ -9,28 +9,28 @@ const userInitialState = {
 	role: '',
 };
 
-export const userReducer = (state = userInitialState, action) => {
-	switch (action.type) {
+export const userReducer = (state = userInitialState, { type, payload }) => {
+	switch (type) {
 		case userTypes.LOGOUT_USER:
 			return { ...userInitialState };
 		case userTypes.LOGIN_USER:
 			return {
 				...state,
 				isAuth: true,
-				name: action.payload.name,
-				email: action.payload.email,
-				token: action.payload.token,
+				name: payload.name,
+				email: payload.email,
+				token: payload.token,
 				error: '',
 			};
 		case userTypes.LOGIN_USER_ERROR:
 			return {
 				...state,
-				error: action.payload,
+				error: payload,
 			};
 		case userTypes.LOGIN_USER_ROLE:
 			return {
 				...state,
-				role: action.payload,
+				role: payload,
 			};
 		default:
 			return state;
